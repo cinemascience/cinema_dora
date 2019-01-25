@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!--This is the default title but it should by updated if there is a title in the input-->
+        <title>DORA Ensemble Explorer</title>
+        <!-- dora_style stylesheet should handle the look and feel of the webpage -->
+        <link rel="stylesheet" type="text/css" href="dora_style.css">
+    </head>
+    
+    <body oncontextmenu="return false;">
+        <!-- main is a full screen div -->
+        <div class="main" id="dora_wrapper">
+        </div>
+        
+        <div class="fsmodal" id="about_dora">
+            <div class="fsmodal-content" id="about_dora_content">
+                <span class="spanbuttonrt" id="close_about_me">&times</span>
+                <div class="glimage"><canvas id=interactivelogo></canvas></div>
+                <div class="info" id="about_dora_info">
+                    Come on Vamanos lets go, you can do it!!!<br>
+                    Some information about how to use DORA:
+
+                </div>
+            </div>
+        </div>
+
+        
+
+
+        <!-- include external javascript libraries not part of the DORA framework -->
+        
+        <script src="externjs/jquery-3.3.1.min.js"></script>
+        <script src="externjs/twgl-full.js"></script>
+        <script src="externjs/pouchdb-7.0.0.min.js"></script>
+
+        <!-- include dora javascript files -->
+        
+        <script src="js/utils.js"></script>
+        <script src="js/mouse.js"></script>
+        <script src="js/glcanvas.js"></script><!-- Web GL helper object -->
+        <script src="js/interactive_logo.js"></script><!-- Interactive Logo for about me -->
+
+        <script src="js/dora_query.js"></script><!-- For querying the dora database -->
+        <script src="js/dora_database.js"></script><!-- For creating the DORA database -->
+        <script src="js/dora_layouts.js"></script><!-- Controls the look and feel of DORA -->
+        <script src="js/cinema_reader.js"></script><!-- reads cinema a/d and dora ensemble files -->
+        
+        <script>
+            
+            //creates a layout for the DORA framework
+            layout = new DORA_LAYOUT("dora_wrapper");
+            layout.initstandard();
+            
+            var doradb;
+            //read in the ensemble dataset 
+            var cinema = new cinemareader("info.json","./data/");
+            cinema.parse(function(){
+              //create and build data base
+              var database = new dora_database(cinema);
+              //newdb is will be true if new database created
+              //else we are using a previously created and stored db
+              database.build_data_base(function(newdb){
+              doradb = new DORA_DB();
+              doradb.from_old_format(database);
+                
+
+              });
+            });
+            
+        </script>
+        
+        
+    </body>
+    
+</html>
+      
